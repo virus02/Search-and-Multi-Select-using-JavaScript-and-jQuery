@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <link href="https://fonts.googleapis.com/css?family=Lato:100,300,600" rel="stylesheet" type="text/css">
+        <link href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" rel="stylesheet" type="text/css">
+        <link type="text/css" rel="stylesheet" href="style.css">
+        
+        <title>Multi Search</title>
+    </head>
+    <body style="background-image: linear-gradient(rgb(135,206,250), rgba(62, 20, 20, 0.4));background-size: cover;background-position: center;font-family: Lato;font-weight: 300;position: relative;height: 100vh;color: #555;">
+        <div class="wrapper clearfix">
+            <div class="box" style="width: 100%;float: left;height: 600px;padding: 100px;background-color: azure;">
+                <div class="menusort">
+                    <ul>
+                        <li>
+                            <input type="search" name="" placeholder="Search" class="menusearch" id="myInput" onkeyup="myFunction()">
+                        </li>
+                        
+                        <li>
+
+                            <button class="filterbutton1"><i class="fa fa-filter" aria-hidden="true"></i> Filter</button>
+
+                            <div class="filterbox1" style="display: none;">
+                                <ul>
+                                    <li>
+                                        <label class="selabel">
+                                          <input type="checkbox" class="nCheck" id="1" value="Cricket">
+                                          <span class="filmark">Cricket</span>
+                                        </label>
+                                    </li>
+                                    <li>
+                                        <label class="selabel">
+                                          <input type="checkbox" class="nCheck" id="2" value="Football">
+                                          <span class="filmark">Football</span>
+                                        </label>
+                                    </li>
+                                    <li>
+                                        <label class="selabel">
+                                          <input type="checkbox" class="nCheck" id="3" value="Basketball">
+                                          <span class="filmark">Basketball</span>
+                                        </label>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                    <div class="row">
+                        <div class="column list1">
+                            <div class="card" style="margin-top: 10px;">
+                                <img src="images/virat.jpg" alt="Avatar" style="width:100%">
+                                <div class="container">
+                                    <input type="hidden" class="name" value="Virat Kohli"> 
+                                    <input type="hidden" class="dName" value="Cricket">
+                                    <h4><b>Virat Kohli</b></h4> 
+                                    <p>Cricket</p> 
+                                </div>
+                            </div>
+                        </div>
+                        <div class="column list1">
+                            <div class="card" style="margin-top: 10px;">
+                                <img src="images/lbj.jpg" alt="Avatar" style="width:100%">
+                                <div class="container">
+                                    <input type="hidden" class="name" value="Lebron James"> 
+                                    <input type="hidden" class="dName" value="Basketball">
+                                    <h4><b>LeBron James</b></h4> 
+                                    <p>Basketball</p> 
+                                </div>
+                            </div>
+                        </div>
+                         <div class="column list1">
+                            <div class="card" style="margin-top: 10px;">
+                                <img src="images/dhoni.jpeg" alt="Avatar" style="width:100%">
+                                <div class="container">
+                                    <input type="hidden" class="name" value="MS Dhoni"> 
+                                    <input type="hidden" class="dName" value="Cricket">
+                                    <h4><b>MS Dhoni</b></h4> 
+                                    <p>Cricket</p> 
+                                </div>
+                            </div>
+                        </div>
+                        <div class="column list1">
+                            <div class="card" style="margin-top: 10px;">
+                                <img src="images/ronaldo.jpg" alt="Avatar" style="width:100%">
+                                <div class="container">
+                                    <input type="hidden" class="name" value="Cristiano Ronaldo"> 
+                                    <input type="hidden" class="dName" value="Football">
+                                    <h4><b>Cristiano Ronaldo</b></h4> 
+                                    <p>Football</p> 
+                                </div>
+                            </div>
+                        </div>
+                        <p id="pName" style="display: none;text-align: center;margin-top: 10px;font-size: 40px;">No such player!!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $(".filterbutton1").click(function () {
+                $(".filterbox1").toggle();
+            });
+
+            $(document).click(function (e) {
+                if (!$(e.target).hasClass("filterbutton1") 
+                    && $(e.target).parents(".filterbox1").length === 0) 
+                {
+                    $(".filterbox1").hide();
+                }
+            });
+
+        });    
+    </script>
+    <script>
+        function myFunction(){
+            var input, filter, a, pName, txtValue;
+            input = document.getElementById("myInput");
+            filter = input.value.toUpperCase();
+            a = $('.list1');
+            pName = document.getElementById('pName');
+            var nCount = 0; 
+            for (var i=0;i<a.length;i++){
+                if ($(a[i]).find('.name').val() != null){
+                        txtValue = $(a[i]).find('.name').val().toUpperCase();
+                    }
+                else {
+                    txtValue = "";
+                }
+                if (txtValue.indexOf(filter) > -1){
+                    a[i].style.display = "";
+                    nCount = nCount + 1;
+                }
+                else 
+                {
+                    a[i].style.display = "none";
+                    pName.style.display = "block";
+                }
+            }
+            if (nCount == 0){
+                pName.style.display = "block";
+            }
+            else
+            {
+                pName.style.display = "none";
+            }
+        } 
+        var idA = new Array();
+        $('.nCheck').on('click', function(){
+            if(!idA.includes($(this).val().toUpperCase())){
+                idA.push($(this).val().toUpperCase());
+            } 
+            else {
+                var i = idA.indexOf($(this).val().toUpperCase());
+                if (i != -1){
+                    idA.splice(i,1);
+                }
+            }
+            var a = $('.list1');
+            for (var i=0;i<a.length;i++){
+                if ($(a[i]).find('.dName').val() != null){
+                    var val = $(a[i]).find('.dName').val().toUpperCase();
+                    if (idA.includes(val)){
+                        a[i].style.display="";
+                    }
+                    else{
+                        a[i].style.display="none";
+                    }
+                }
+            }
+            if (idA.length == 0){
+                for (var i=0;i<a.length;i++){
+                    a[i].style.display = "";
+                }
+            }
+        });
+    </script>
+    </body>
+</html>
