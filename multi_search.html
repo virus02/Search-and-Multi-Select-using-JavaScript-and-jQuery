@@ -46,6 +46,23 @@
                         </li>
                     </ul>
                     <div class="row">
+                        <div class="showFilter" style="margin-top: 12px; padding: 5px;display: none;">
+                            <p style="display: inline-block; margin: 0px; ">Showing by Filter : </p>
+                            <span class="filter_tags criTag shTag" style="display: none;border: 1px solid #ddd;border-radius: 15px;padding: 2px;margin-right: 7px;color: #0e0e0e;background: skyblue;">
+                                <input type="hidden" class="fil" value="CRICKET">
+                                <label>Cricket</label>
+                            </span>
+                            <span class="filter_tags basTag shTag" style="display: none;border: 1px solid #ddd;border-radius: 15px;padding: 2px;margin-right: 7px;color: #0e0e0e;background: #ebe087;">
+                                <input type="hidden" class="fil" value="BASKETBALL">
+                                <label>BasketBall</label>
+                            </span>
+                            <span class="filter_tags fooTag shTag" style="display: none;border: 1px solid #ddd;border-radius: 15px;padding: 4px;margin-right: 7px;color: #f3f3f3;background: #060606;">
+                                <input type="hidden" class="fil" value="FOOTBALL">
+                                <label>FootBall</label>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="row">
                         <div class="column list1">
                             <div class="card" style="margin-top: 10px;">
                                 <img src="images/virat.jpg" alt="Avatar" style="width:100%">
@@ -146,7 +163,60 @@
             }
         } 
         var idA = new Array();
+        if ('savedPrefs' in sessionStorage) {
+//            in real world it has to be "id" of the page.
+            tid = 1;
+            prefs = JSON.parse(sessionStorage.savedPrefs);
+            if (tid in prefs) {
+                if (Object.keys(prefs[tid]).length === 0) {
+                    delete prefs[tid];
+                    sessionStorage.savedPrefs = JSON.stringify(prefs);
+                }
+            }
+            prefs = JSON.parse(sessionStorage.savedPrefs);
+            for (k in prefs[tid]) {
+                idA.push(k);
+            }
+            for (k in prefs) {
+                if (k == tid) {
+                    if (tid in prefs) {
+                        if (prefs[tid]["CRICKET"]) {
+                            $('.criTag').show();
+                        }
+                        if (prefs[tid]["BASKETBALL"]) {
+                            $('.basTag').show();
+                        }
+                        if (prefs[tid]["FOOTBALL"]) {
+                            $('.fooTag').show();
+                        }
+                    }
+                    $('.showFilter').show();
+                    f=$('.nCheck');
+                    var a = $('.list1');
+                    for (var i=0;i<a.length;i++){
+                        if ($(a[i]).find('.dName').val() != null){
+                            var val = $(a[i]).find('.dName').val().toUpperCase();
+                            if (idA.includes(val)){
+                                a[i].style.display="";
+                            }
+                            else{
+                                a[i].style.display="none";
+                            }
+                        }
+                    }
+                    for (var j=0;j<f.length;j++) {
+                        var val = $(f[j]).val().toUpperCase();
+                        if (Object.keys(prefs[tid]).includes(val)) {
+                            $(f[j]).attr('checked', true);
+                        } else {
+                            $(f[j]).attr('checked', false);
+                        }
+                    }
+                }
+            }
+        }
         $('.nCheck').on('click', function(){
+            cval = $(this).val();
             if(!idA.includes($(this).val().toUpperCase())){
                 idA.push($(this).val().toUpperCase());
             } 
@@ -155,6 +225,19 @@
                 if (i != -1){
                     idA.splice(i,1);
                 }
+            }
+            input = $('.shTag');
+            for (var a=0;a<input.length;a++){
+                tval = $(input[a]).find('.fil').val();
+                if (idA.includes(tval)){
+                    $('.showFilter').show();
+                    $(input[a]).show();
+                } else {
+                    $(input[a]).hide();
+                }
+            }
+            if (idA.length == 0){
+                $('.showFilter').hide();
             }
             var a = $('.list1');
             for (var i=0;i<a.length;i++){
@@ -172,6 +255,33 @@
                 for (var i=0;i<a.length;i++){
                     a[i].style.display = "";
                 }
+            }
+//            in real world it has to be "id" of the page.
+            tid = 1;
+            if ('savedPrefs' in sessionStorage) {
+                prefs = JSON.parse(sessionStorage.savedPrefs);
+                if (tid in prefs) {
+                    hasFilter = prefs[tid];
+                    if (cval.toUpperCase() in prefs[tid]) {
+                        delete prefs[tid][cval.toUpperCase()]
+                    } else {
+                        hasFilter[cval.toUpperCase()] = true;
+                        prefs[tid] = hasFilter;
+                    }
+                } 
+                else {
+                    hasFilter = {};
+                    hasFilter[cval.toUpperCase()] = true;
+                    prefs[tid] = hasFilter;
+                } 
+                sessionStorage.savedPrefs = JSON.stringify(prefs);
+            } 
+            else {
+                var prefs = {};
+                var hasFilter = {};
+                hasFilter[cval.toUpperCase()] = true;
+                prefs[tid] = hasFilter;
+                sessionStorage.savedPrefs = JSON.stringify(prefs);
             }
         });
     </script>
